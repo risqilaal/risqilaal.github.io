@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffd6e8, #d6f0ff);
+    }
+
+    .login-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 250px;
+      border: 2px solid #ffd6e8;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(135deg, #ff9ecb, #8ecfff);
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #ff9ecb, #ffd6e8);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: none;
+      width: 250px;
+      text-align: center;
+    }
+
+    .popup button.close {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <p style="text-align:center; font-size:14px; color:#555;">Selamat datang, silahkan login</p>
+    <h2 style="text-align:center; color:#ff7eb3;">Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p class="error" id="error"></p>
+  </div>
+
+  <script>
+    function login() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+
+      var userBenar = "qila";
+      var passBenar = "20376";
+
+      if (username === userBenar && password === passBenar) {
+        showPopup();
+      } else {
+        document.getElementById("error").innerText = "Username atau password salah!";
+      }
+    }
+  
+    function showPopup() {
+      document.getElementById("popup").style.display = "block";
+      document.getElementById("overlay").style.display = "block";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+    }
+  </script>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="popup" id="popup">
+    <button class="close" onclick="closePopup()">&times;</button>
+    <p>Login berhasil! 🎉</p>
+  </div>
+
+</body>
+</html>
