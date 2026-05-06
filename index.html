@@ -1,338 +1,343 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Risqila Al Qadri</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Game Tebak Kata Hewan</title>
     <style>
-        :root {
-            --blue-soft: #e3f2fd;   
-            --blue-medium: #90caf9;  
-            --blue-dark: #1565c0;    
-            --text-color: #37474f;   
-        }
-
-        html {
-            scroll-behavior: smooth; 
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--blue-soft);
-            color: var(--text-color);
-            margin: 0;
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
             padding: 20px;
-            padding-top: 80px; 
-            line-height: 1.6;
-        }
-
-        /* NAVBAR */
-        nav {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--blue-medium);
-        }
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 20px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--blue-dark);
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover {
-            text-shadow: 0 0 8px var(--blue-medium);
-            transform: scale(1.1);
-            display: inline-block;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-top: 10px solid var(--blue-dark);
-        }
-
-        /* LOGIK HALAMAN */
-        .page {
-            display: none; 
-        }
-
-        .active-page {
-            display: block; 
-        }
-
-        header {
+            background-color: #f0f8ff;
             text-align: center;
-            margin-bottom: 40px;
         }
-
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid var(--blue-medium);
-            object-fit: cover;
-            margin-bottom: 15px;
-            filter: grayscale(100%);
-            transition: all 0.5s ease;
+        
+        .input-container {
+            margin: 20px 0;
         }
-
-        .profile-img:hover {
-            filter: grayscale(0%);
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        h1 { color: var(--blue-dark); margin-bottom: 5px; }
-
-        h2 { 
-            color: var(--blue-dark); 
-            border-bottom: 2px solid var(--blue-medium);
-            padding-bottom: 5px;
-            margin-top: 30px;
-            text-transform: uppercase;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-
-        /* Efek bling untuk Judul Section (H2) */
-        h2:hover {
-            background: linear-gradient(90deg, #1565c0, #ff00ff, #00ffff, #1565c0);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: blingbling 1.5s linear infinite;
-        }
-
-        .edu-item {
-            margin-bottom: 15px;
-            padding-left: 10px;
-            border-left: 3px solid var(--blue-medium);
-            transition: all 0.3s ease;
-        }
-
-        /* Efek bling untuk List Item dan Teks saat hover */
-        .edu-item:hover, section p:hover, .skill-item:hover, .contact-info p:hover {
-            background: linear-gradient(90deg, #1565c0, #ff00ff, #00ffff, #1565c0);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: blingbling 1.5s linear infinite;
-            cursor: default;
-        }
-
-        .edu-year { font-size: 0.9rem; color: #607d8b; font-weight: bold; }
-
-        .skill-item {
+        
+        #kataTebakan {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 30px 0;
+            min-height: 80px;
             display: flex;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .huruf-kotak {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #3498db;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-        }
-
-        .dot {
-            height: 12px; width: 12px;
-            background-color: var(--blue-dark);
-            border-radius: 50%;
-            margin-right: 15px;
-        }
-
-        .direct-link {
-            color: var(--blue-dark);
-            text-decoration: none;
+            font-size: 1.8rem;
             font-weight: bold;
-            border-bottom: 2px solid var(--blue-medium);
+            color: #2c3e50;
         }
-
-        /* STYLING PORTOFOLIO */
-        .portfolio-card {
-            background: #f8f9fa;
-            border: 1px solid var(--blue-medium);
-            border-radius: 15px;
-            margin-top: 20px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
+        
+        .huruf-kotak.tebakan-benar {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-color: #27ae60;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.4);
         }
-
-        .portfolio-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        
+        .huruf-kotak.tebakan-salah {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-color: #e74c3c;
+            color: white;
+            animation: shake 0.5s ease-in-out;
         }
-
-        .preview-img {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            display: block;
-            background-color: #ddd;
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
-
-        .portfolio-info {
-            padding: 25px; 
+        
+        input[type="text"] {
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin: 0 5px;
         }
-
-        .portfolio-info h3 {
-            margin-top: 0;
-            color: var(--blue-dark);
-            transition: all 0.3s ease;
-        }
-
-        /* EFEK BLING-BLING PADA TEKS PORTOFOLIO */
-        .portfolio-card:hover h3 {
-            background: linear-gradient(90deg, #1565c0, #ff00ff, #00ffff, #1565c0);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: blingbling 1.5s linear infinite;
-            font-weight: 900;
-        }
-
-        @keyframes blingbling {
-            to {
-                background-position: 200% center;
-            }
-        }
-
-        .btn-back {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: var(--blue-dark);
+        
+        button {
+            font-size: 1.2rem;
+            padding: 12px 24px;
+            margin-left: 10px;
             cursor: pointer;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+        
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #pesan {
+            margin-top: 20px;
             font-weight: bold;
-            text-decoration: underline;
+            font-size: 1.2rem;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 25px;
+        }
+        
+        #scoreBoard {
+            margin-top: 25px;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        #riwayat {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            background: rgba(255,255,255,0.8);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .skor-badge {
+            background: linear-gradient(135deg, #12f32c, #67e622);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 0 10px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .kesempatan-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 0 10px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .popup-content button {
+            margin: 10px;
         }
     </style>
 </head>
 <body>
-
-<nav>
-    <ul>
-        <li><a onclick="showPage('home')">Home</a></li>
-        <li><a onclick="showPage('portfolio')">Portofolio</a></li>
-    </ul>
-</nav>
-
-<div id="home" class="page active-page">
-    <div class="container">
-        <header>
-            <img src="foto/WhatsApp Image 2026-04-01 at 09.02.00.jpeg" alt="Foto Risqila" class="profile-img">
-            <h1>Risqila Al Qadri</h1>
-        </header>
-
-        <section>
-            <h2>Tentang Saya</h2>
-            <p>Nama saya Risqila Al Qadri. Saya lahir tanggal 15 Oktober tahun 2009 di Mataram Nusa Tenggara Barat. Saya adalah siswa SMKN 1 Bawang kelas 10 jurusan Pengembangan Perangkat Lunak Dan Gim (PPLG).</p>
-        </section>
-
-        <section>
-            <h2>Pendidikan</h2>
-            <div class="edu-item">
-                <span class="edu-year">2025 - Sekarang</span><br>
-                <strong>SMK NEGERI 1 BAWANG</strong>
-            </div>
-            <div class="edu-item">
-                <span class="edu-year">2022 - 2025</span><br>
-                <strong>SMP NEGERI 4 BANJARNEGARA</strong>
-            </div>
-            <div class="edu-item">
-                <span class="edu-year">2018 - 2022</span><br>
-                <strong>SD NEGERI 1 KARANGTENGAH</strong>
-            </div>
-        </section>
-
-        <section>
-            <h2>Pengalaman Organisasi</h2>
-            <p>• PMR (Palang Merah Remaja)</p>
-        </section>
-
-        <section>
-            <h2>Kemampuan</h2>
-            <strong>Soft Skill:</strong>
-            <div class="skill-item"><span class="dot"></span><span>Saya tipe orang yang mudah berbaur.</span></div>
-            <div class="skill-item"><span class="dot"></span><span>Cepat menyesuaikan di tempat-tempat baru.</span></div>
-            <br>
-            <strong>Hard Skill:</strong>
-            <div class="skill-item"><span class="dot"></span><span>Microsoft Excel.</span></div>
-            <div class="skill-item"><span class="dot"></span><span>Microsoft Word.</span></div>
-            <div class="skill-item"><span class="dot"></span><span>Design UI/UX Di Figma.</span></div>
-        </section>
-
-        <section>
-            <h2>Kontak</h2>
-            <div class="contact-info">
-                <p><strong>Alamat:</strong> Karangtengah Banjarnegara Rt 06/Rw 03</p>
-                <p><strong>Email:</strong> <a href="mailto:fatmahrisqila@gmail.com" class="direct-link">Kirim Email</a></p>
-                <p><strong>Sosial Media:</strong> <a href="https://instagram.com/qqiillllaaaa" target="_blank" class="direct-link">Instagram</a></p>
-            </div>
-        </section>
+    <h1>🐈 Game Tebak Kata Hewan 🐋</h1>
+    
+    <div class="input-container">
+        <p>Masukkan huruf tebakanmu:</p>
+        <input type="text" id="inputHuruf" maxlength="1" autofocus />
+        <button id="btnTebak">Tebak Huruf</button>
     </div>
-</div>
 
-<div id="portfolio" class="page">
-    <div class="container">
-        <span class="btn-back" onclick="showPage('home')">← Kembali ke Home</span>
-        <h2>Portofolio Saya</h2>
-        
-        <div class="portfolio-card">
-            <img src="foto/Screenshot 2026-04-01 104712.png" alt="Preview Halaman Login" class="preview-img">
-            <div class="portfolio-info">
-                <h3>UI/UX Design - Halaman Login</h3>
-                <p>Design halaman login.</p>
-                <a href="https://www.figma.com/design/thLoPZaKNZX3h6uTFLRHGg/Untitled?node-id=0-1&p=f&t=RuW4jQ5EnQvvXeA8-0" target="_blank" class="direct-link">Lihat Project di Figma →</a>
-            </div>
-        </div>
+    <div id="kataTebakan"></div>
+    <div id="pesan"></div>
 
-        <div class="portfolio-card">
-            <img src="foto/Screenshot 2026-04-01 104650.png" alt="Preview Beranda Shopee" class="preview-img">
-            <div class="portfolio-info">
-                <h3>UI/UX Design - Tampilan Beranda Shopee</h3>
-                <p>Design tampilan depan Shopee.</p>
-                <a href="https://www.figma.com/design/thLoPZaKNZX3h6uTFLRHGg/Untitled?node-id=20-2&p=f&t=RuW4jQ5EnQvvXeA8-0" target="_blank" class="direct-link">Lihat Project di Figma →</a>
-            </div>
-        </div>
+    <div id="scoreBoard">
+        <span class="kesempatan-badge">Kesempatan: <span id="kesempatan">5</span></span>
+        <span class="skor-badge">Skor: <span id="skor">0</span></span>
+    </div>
+    
+    <div id="riwayat">
+        Huruf yang sudah ditebak: <span id="hurufTebakan"></span>
+    </div>
 
-        <div class="portfolio-card">
-            <img src="foto/Screenshot 2026-04-01 104822.png" alt="Preview Aplikasi Kantin" class="preview-img">
-            <div class="portfolio-info">
-                <h3>UI/UX Design - Aplikasi Pemesanan Makanan Kantin Sekolah</h3>
-                <p>Design tampilan aplikasi pemesanan makanan di kantin sekolah.</p>
-                <a href="https://www.figma.com/design/thLoPZaKNZX3h6uTFLRHGg/Untitled?node-id=51-2&p=f&t=RuW4jQ5EnQvvXeA8-0" target="_blank" class="direct-link">Lihat Project di Figma →</a>
-            </div>
+    <div id="popupMainLagi" class="popup">
+        <div class="popup-content">
+            <p>Mau main lagi?</p>
+            <button onclick="mainLagi()">Ya</button>
+            <button onclick="lanjutGame()">Tidak</button>
         </div>
     </div>
-</div>
 
-<script>
-    function showPage(pageId) {
-        const pages = document.querySelectorAll('.page');
-        pages.forEach(page => {
-            page.classList.remove('active-page');
+    <script>
+        const kataHewan = ["gajah","Ular","angsa","sapi","Lalat","flamingo","zebra","tikus","hiu","paus","gurita","penyu","kuda","elang","bebek","macan","burung","ular","singa","kucing","anjing","kuda","sapi","ayam"];
+
+        let kataTerpilih = "";
+        let arrayKata = [];
+        let arrayJawaban = [];
+        let kotakElements = [];
+        let kesempatan = 5;
+        let skor = 0;
+        let hurufSudahTebak = [];
+
+        const kataTebakanElem = document.getElementById("kataTebakan");
+        const inputHurufElem = document.getElementById("inputHuruf");
+        const btnTebak = document.getElementById("btnTebak");
+        const pesanElem = document.getElementById("pesan");
+        const kesempatanElem = document.getElementById("kesempatan");
+        const skorElem = document.getElementById("skor");
+        const hurufTebakanElem = document.getElementById("hurufTebakan");
+
+        function tampilkanPopup() {
+            document.getElementById("popupMainLagi").style.display = "flex";
+        }
+
+        function tutupPopup() {
+            document.getElementById("popupMainLagi").style.display = "none";
+        }
+
+        function mainLagi() {
+            tutupPopup();
+            mulaiGame();
+        }
+
+        function lanjutGame() {
+            tutupPopup();
+        }
+
+        function mulaiGame() {
+            kesempatan = 5;
+            skor = 0;
+            hurufSudahTebak = [];
+            kesempatanElem.textContent = kesempatan;
+            skorElem.textContent = skor;
+            hurufTebakanElem.textContent = "";
+            pesanElem.textContent = "";
+            btnTebak.disabled = false;
+            inputHurufElem.disabled = false;
+
+            kataTerpilih = kataHewan[Math.floor(Math.random() * kataHewan.length)];
+            arrayKata = kataTerpilih.split("");
+            arrayJawaban = arrayKata.map(() => "_");
+
+            tampilkanKata();
+            inputHurufElem.value = "";
+            inputHurufElem.focus();
+        }
+
+        function tampilkanKata() {
+            kataTebakanElem.innerHTML = "";
+            kotakElements = [];
+            
+            arrayJawaban.forEach((huruf, index) => {
+                const kotak = document.createElement("div");
+                kotak.className = "huruf-kotak";
+                kotak.textContent = huruf === "_" ? " " : huruf;
+                kataTebakanElem.appendChild(kotak);
+                kotakElements.push(kotak);
+            });
+        }
+
+        function updateKotak(huruf, benar) {
+            kotakElements.forEach((kotak, index) => {
+                if (arrayKata[index] === huruf) {
+                    kotak.textContent = huruf;
+                    if (benar) {
+                        kotak.classList.add("tebakan-benar");
+                    }
+                }
+            });
+        }
+
+        function tebakHuruf() {
+            const huruf = inputHurufElem.value.toLowerCase();
+            if (!huruf || huruf.length !== 1 || !/^[a-z]$/.test(huruf)) {
+                pesanElem.textContent = "❌ Masukkan huruf yang valid (a-z)!";
+                inputHurufElem.value = "";
+                return;
+            }
+            
+            if (hurufSudahTebak.includes(huruf)) {
+                pesanElem.textContent = `⚠️ Huruf "${huruf.toUpperCase()}" sudah ditebak!`;
+                inputHurufElem.value = "";
+                return;
+            }
+
+            hurufSudahTebak.push(huruf);
+            hurufTebakanElem.textContent = hurufSudahTebak.join(", ").toUpperCase();
+
+            let adaHuruf = false;
+            for (let i = 0; i < arrayKata.length; i++) {
+                if (arrayKata[i] === huruf) {
+                    arrayJawaban[i] = huruf;
+                    adaHuruf = true;
+                }
+            }
+
+            if (!adaHuruf) {
+                kesempatan--;
+                kesempatanElem.textContent = kesempatan;
+            } else {
+                skor += 10;
+                skorElem.textContent = skor;
+                updateKotak(huruf, true);
+            }
+
+            inputHurufElem.value = "";
+            cekStatus();
+        }
+
+        function cekStatus() {
+            if (arrayJawaban.join("") === kataTerpilih) {
+                pesanElem.textContent = `🎉 Menang! Kata: ${kataTerpilih}`;
+                btnTebak.disabled = true;
+                setTimeout(tampilkanPopup, 1500);
+            } else if (kesempatan === 0) {
+                pesanElem.textContent = `💀 Game Over! Kata: ${kataTerpilih}`;
+                btnTebak.disabled = true;
+                setTimeout(tampilkanPopup, 1500);
+            }
+        }
+
+        btnTebak.addEventListener("click", tebakHuruf);
+
+        inputHurufElem.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") {
+                tebakHuruf();
+            }
         });
-        document.getElementById(pageId).classList.add('active-page');
-        window.scrollTo(0,0);
-    }
-</script>
 
+        mulaiGame();
+    </script>
 </body>
 </html>
