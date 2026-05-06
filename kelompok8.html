@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Game Tebak Kata Hewan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+            text-align: center;
+        }
+        
+        .input-container {
+            margin: 20px 0;
+        }
+        
+        #kataTebakan {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 30px 0;
+            min-height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .huruf-kotak {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #3498db;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .huruf-kotak.tebakan-benar {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-color: #27ae60;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.4);
+        }
+        
+        .huruf-kotak.tebakan-salah {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-color: #e74c3c;
+            color: white;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        input[type="text"] {
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin: 0 5px;
+        }
+        
+        button {
+            font-size: 1.2rem;
+            padding: 12px 24px;
+            margin-left: 10px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+        
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #pesan {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 25px;
+        }
+        
+        #scoreBoard {
+            margin-top: 25px;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        #riwayat {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            background: rgba(255,255,255,0.8);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .skor-badge {
+            background: linear-gradient(135deg, #12f32c, #67e622);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 0 10px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .kesempatan-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 0 10px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .popup-content button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐈 Game Tebak Kata Hewan 🐋</h1>
+    
+    <div class="input-container">
+        <p>Masukkan huruf tebakanmu:</p>
+        <input type="text" id="inputHuruf" maxlength="1" autofocus />
+        <button id="btnTebak">Tebak Huruf</button>
+    </div>
+
+    <div id="kataTebakan"></div>
+    <div id="pesan"></div>
+
+    <div id="scoreBoard">
+        <span class="kesempatan-badge">Kesempatan: <span id="kesempatan">5</span></span>
+        <span class="skor-badge">Skor: <span id="skor">0</span></span>
+    </div>
+    
+    <div id="riwayat">
+        Huruf yang sudah ditebak: <span id="hurufTebakan"></span>
+    </div>
+
+    <div id="popupMainLagi" class="popup">
+        <div class="popup-content">
+            <p>Mau main lagi?</p>
+            <button onclick="mainLagi()">Ya</button>
+            <button onclick="lanjutGame()">Tidak</button>
+        </div>
+    </div>
+
+    <script>
+        const kataHewan = ["gajah","Ular","angsa","sapi","Lalat","flamingo","zebra","tikus","hiu","paus","gurita","penyu","kuda","elang","bebek","macan","burung","ular","singa","kucing","anjing","kuda","sapi","ayam"];
+
+        let kataTerpilih = "";
+        let arrayKata = [];
+        let arrayJawaban = [];
+        let kotakElements = [];
+        let kesempatan = 5;
+        let skor = 0;
+        let hurufSudahTebak = [];
+
+        const kataTebakanElem = document.getElementById("kataTebakan");
+        const inputHurufElem = document.getElementById("inputHuruf");
+        const btnTebak = document.getElementById("btnTebak");
+        const pesanElem = document.getElementById("pesan");
+        const kesempatanElem = document.getElementById("kesempatan");
+        const skorElem = document.getElementById("skor");
+        const hurufTebakanElem = document.getElementById("hurufTebakan");
+
+        function tampilkanPopup() {
+            document.getElementById("popupMainLagi").style.display = "flex";
+        }
+
+        function tutupPopup() {
+            document.getElementById("popupMainLagi").style.display = "none";
+        }
+
+        function mainLagi() {
+            tutupPopup();
+            mulaiGame();
+        }
+
+        function lanjutGame() {
+            tutupPopup();
+        }
+
+        function mulaiGame() {
+            kesempatan = 5;
+            skor = 0;
+            hurufSudahTebak = [];
+            kesempatanElem.textContent = kesempatan;
+            skorElem.textContent = skor;
+            hurufTebakanElem.textContent = "";
+            pesanElem.textContent = "";
+            btnTebak.disabled = false;
+            inputHurufElem.disabled = false;
+
+            kataTerpilih = kataHewan[Math.floor(Math.random() * kataHewan.length)];
+            arrayKata = kataTerpilih.split("");
+            arrayJawaban = arrayKata.map(() => "_");
+
+            tampilkanKata();
+            inputHurufElem.value = "";
+            inputHurufElem.focus();
+        }
+
+        function tampilkanKata() {
+            kataTebakanElem.innerHTML = "";
+            kotakElements = [];
+            
+            arrayJawaban.forEach((huruf, index) => {
+                const kotak = document.createElement("div");
+                kotak.className = "huruf-kotak";
+                kotak.textContent = huruf === "_" ? " " : huruf;
+                kataTebakanElem.appendChild(kotak);
+                kotakElements.push(kotak);
+            });
+        }
+
+        function updateKotak(huruf, benar) {
+            kotakElements.forEach((kotak, index) => {
+                if (arrayKata[index] === huruf) {
+                    kotak.textContent = huruf;
+                    if (benar) {
+                        kotak.classList.add("tebakan-benar");
+                    }
+                }
+            });
+        }
+
+        function tebakHuruf() {
+            const huruf = inputHurufElem.value.toLowerCase();
+            if (!huruf || huruf.length !== 1 || !/^[a-z]$/.test(huruf)) {
+                pesanElem.textContent = "❌ Masukkan huruf yang valid (a-z)!";
+                inputHurufElem.value = "";
+                return;
+            }
+            
+            if (hurufSudahTebak.includes(huruf)) {
+                pesanElem.textContent = `⚠️ Huruf "${huruf.toUpperCase()}" sudah ditebak!`;
+                inputHurufElem.value = "";
+                return;
+            }
+
+            hurufSudahTebak.push(huruf);
+            hurufTebakanElem.textContent = hurufSudahTebak.join(", ").toUpperCase();
+
+            let adaHuruf = false;
+            for (let i = 0; i < arrayKata.length; i++) {
+                if (arrayKata[i] === huruf) {
+                    arrayJawaban[i] = huruf;
+                    adaHuruf = true;
+                }
+            }
+
+            if (!adaHuruf) {
+                kesempatan--;
+                kesempatanElem.textContent = kesempatan;
+            } else {
+                skor += 10;
+                skorElem.textContent = skor;
+                updateKotak(huruf, true);
+            }
+
+            inputHurufElem.value = "";
+            cekStatus();
+        }
+
+        function cekStatus() {
+            if (arrayJawaban.join("") === kataTerpilih) {
+                pesanElem.textContent = `🎉 Menang! Kata: ${kataTerpilih}`;
+                btnTebak.disabled = true;
+                setTimeout(tampilkanPopup, 1500);
+            } else if (kesempatan === 0) {
+                pesanElem.textContent = `💀 Game Over! Kata: ${kataTerpilih}`;
+                btnTebak.disabled = true;
+                setTimeout(tampilkanPopup, 1500);
+            }
+        }
+
+        btnTebak.addEventListener("click", tebakHuruf);
+
+        inputHurufElem.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") {
+                tebakHuruf();
+            }
+        });
+
+        mulaiGame();
+    </script>
+</body>
+</html>
